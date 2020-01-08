@@ -1,5 +1,8 @@
 # Ignore non-anonymized data
-Clean_anonymized_dr_data.csv
+Clean_dr_data.csv
 
 # Ignore venv
 venv
+
+# Ignore extensions and stuff
+.DS_Store

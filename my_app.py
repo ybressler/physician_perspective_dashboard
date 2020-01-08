@@ -5,15 +5,14 @@ import flask
 
 # Import logging module
 import logging
-import datetime
 
 
 # Standard packages
 import re
 import os
 import json
-import time
 import pandas as pd
+import datetime
 
 # Set the pandas options for printing...
 pd.options.display.max_columns = 60
@@ -24,13 +23,12 @@ import pathlib
 
 # dash packages
 import dash
-import dash_auth
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_daq as daq
 
-from dash.dependencies import Input, Output, State, ClientsideFunction
-import dash_table
+from dash.dependencies import Input, Output, State
+# import dash_table
 import plotly.graph_objs as go
 from dash.exceptions import PreventUpdate
 
@@ -88,6 +86,8 @@ app.layout = html.Div(
         # Some titles
         html.H1(proj_deets['project_title']),
         html.P(proj_deets['project_description']),
+        html.H2('If you want to join in on the fun, stick to this side of the room', style={'marginLeft':'5%'}),
+        html.H2('Meanwhile you can close the ', style={'marginLeft':'5%'}),
 
         # Store the data
         dcc.Store(id='data-1'),
