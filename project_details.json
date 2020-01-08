@@ -1,0 +1,20 @@
+{
+  "one_liner":"Predicting stuff",
+  "project_title" : "Ad Salience",
+  "project_description":"This is a sample, MVP",
+  "meta_og_description":"Ad Salience uses deep learning (\"ai\") to determine the best version of an ad",
+  "project_description_tech":"This project is in its first stages",
+  "project_manager":"[Tony Ramos](mailto:tonyleeramos@gmail.com)\n\n*(Business Dev)*\n",
+  "project_team": "[Yacin Tmimi](mailto:ytmimi@gmail.com)\n\n*(Techstack)*\n\n[Yaakov Bressler](mailto:yaakovbressler@gmail.com)\n\n*(Data Scientist)*",
+  "meta_title":"Ad Salience",
+  "meta_description":"Ad Salience",
+  "tab_1_title":"Create",
+  "tab_1_header":"Ready to create some ads?",
+  "tab_1_description":" Begin by submitting your website below.",
+  "tab_2_title":"Ad Variations",
+  "tab_2_header":"Here are every version your ad can be.",
+  "tab_2_description":"Here are every version your ad can be.",
+  "tab_3_title":"Outcomes",
+  "tab_3_header":"Experimental Outcomes",
+  "tab_3_description":"The results of our experiment."
+}

@@ -1,0 +1,5 @@
+# Ignore non-anonymized data
+Clean_anonymized_dr_data.csv
+
+# Ignore venv
+venv
