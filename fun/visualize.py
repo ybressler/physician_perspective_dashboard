@@ -40,7 +40,7 @@ def update_figure_3d(
     sz = minmax_scale(sz,(z*2,z*8))
 
 
-    for group_id, group_df in df.groupby():
+    for group_id, group_df in df.groupby(group_by):
 
         trace = go.Scatter3d(
             x=group_df[x_col],

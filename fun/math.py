@@ -28,6 +28,6 @@ def clean_nulls(s, fill=0, inverse=False, fill_2 =0):
         fill = match_dict.get(fill)
 
     if inverse:
-        s = s.fillna(fill2)
+        s = s.fillna(fill_2)
 
     return s
