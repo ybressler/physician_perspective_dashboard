@@ -34,7 +34,7 @@ from dash.exceptions import PreventUpdate
 
 
 # Load private stuff
-from fun.create_3d_graph import create_3d_graph
+from fun.visualize import update_figure_3d
 
 
 # --------------------------------------------------------------------------------
@@ -216,7 +216,7 @@ def load_data(data, x_axis):
     if not x_axis:
         x_axis = 'Age'
 
-    figure = create_3d_graph(df=df, x_col=x_axis)
+    figure = update_figure_3d(df=df, x_col=x_axis)
     # ------------------------------------------------
 
     return figure
