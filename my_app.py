@@ -103,6 +103,7 @@ app.layout = html.Div(
         ),
 
         # Store the data
+        html.Div(id="data-load-permission", children='-',style={"display":"none"}),
         dcc.Store(id='data-1'),
         dcc.Store(id='data-2', storage_type='memory'),
     ]
@@ -132,6 +133,26 @@ def collapse_stuff(n_clicks, style):
         style['display'] = 'none'
 
     return style
+
+
+# Load the data
+
+@app.callback(
+    Output('data-1', 'data'),
+    [Input('data-load-permission', 'children')]
+    )
+def collapse_stuff(permission):
+    if not permission:
+        raise PreventUpdate
+
+    if os.path.isfile(pathlib.Path('Data/Clean_dr_data.csv')):
+        data_path = pathlib.Path('Data/Clean_dr_data.csv')
+    else:
+        data_path = pathlib.Path('Data/Clean_anonymized_dr_data.csv')
+
+    logger.info(f'Loading data from', data_path)
+
+    return {}
 
 # --------------------------------------------------------------------------------
 #                 F I N I S H E D
