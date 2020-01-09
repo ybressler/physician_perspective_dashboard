@@ -297,8 +297,9 @@ def create_graph(data, axis_data):
     group_by = axis_data_inversed.get('group_by')
     size_by = axis_data_inversed.get('size_by')
 
-    if 'Social_Most_Value_2' in any([x_col,y_col,z_col]):
-        raise PreventUpdate
+    for z in [x_col,y_col,z_col]:
+        if z and 'Social_Most_Value_2' in z:
+            raise PreventUpdate
 
     figure = update_figure_3d(df=df, x_col=x_col, y_col=y_col, z_col=z_col, group_by=group_by, size_by=size_by)
     # ------------------------------------------------
@@ -315,5 +316,5 @@ url = f"http://127.0.0.1:{port}"
 
 if __name__ == '__main__':
     # Run the actual app
-    app.run_server(debug=True, dev_tools_ui=True, port=port)
-    # app.run_server()
+    # app.run_server(debug=True, dev_tools_ui=True, port=port)
+    app.run_server()
