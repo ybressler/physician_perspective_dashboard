@@ -34,6 +34,12 @@
   /* max-width: 960px; */
 }
 
+.row{
+  display: inline-block;
+  vertical-align: top;
+  width:100%;
+}
+
 .column,
 .columns {
   width: 100%;
@@ -181,23 +187,6 @@ body {
   /* height:auto; */
   /* text-align: center; */
     }
-
-
- /* NOTE:
-This is the color of the NASDAQ branded blue
-rgb(36, 148, 180)
-*/
-
-/* .row{
-  display: inline-block;
-  vertical-align: top;
-  overflow-wrap: break-word;
-  word-break: break-all;
-  width:100%;
-  indent-left: 5%;
-  indent-right: 5%;
-  backgroundColor: 'transparent';
-} */
 
 
 /* Tabs */
@@ -679,6 +668,27 @@ body{
   color: #333;
   border-color: #888;
   outline: 0;
+}
+
+
+.dropdown-label{
+  display: inline-block;
+  /* color:darkgreen; */
+  font-weight: bold;
+  width: 10%;
+  padding-left: 10%;
+  padding-right: 2.5%;
+}
+
+.dropdown-container{
+  display: inline-block;
+  width: 20%;
+  padding-left: 2.5%;
+  padding-right: 2.5%;
+  padding-bottom:10px;
+}
+.dropdown{
+  color:darkgreen;
 }
 
 

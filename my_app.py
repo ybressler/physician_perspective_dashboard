@@ -91,27 +91,53 @@ app.layout = html.Div(
         # collapsable
         html.H2(
             id='collapsable-header',
-            children = 'If you want to join in on the fun, stick to this side of the room',
+            children = 'Toggle User Selections',
             n_clicks=0,
             style={'marginLeft':'5%', 'color':'orange','size':'3rem',  'cursor': 'pointer'}
         ),
         html.Div(
             id='collapsable-content',
             children = [
-                html.Div(children = 'This is a setence about this thing. You love it!'),
+
+                html.Div(className="row", children=[
+                    html.Div(className='dropdown-label', children ='X Axis'),
+                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='x-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True,searchable=False, placeholder="Select your X axis...")),
+                ]),
+
+                html.Div(className="row", children=[
+                    html.Div(className='dropdown-label', children ='Y Axis'),
+                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='y-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Y axis...")),
+                ]),
+
+                html.Div(className="row", children=[
+                    html.Div(className='dropdown-label', children ='Z Axis'),
+                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='z-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Z axis...")),
+                ]),
+
+                html.Div(className="row", children=[
+                    html.Div(className='dropdown-label', children ='Groupby'),
+                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='groupby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Groupby...")),
+                ]),
+
+                html.Div(className="row", children=[
+                    html.Div(className='dropdown-label', children ='Sizeby'),
+                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='sizeby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Sizeby...")),
+                ]),
+
                 html.Hr()
             ],
             style={'marginLeft':'10%', 'marginRight':'5%'}
         ),
-
         # Store the data
+        html.Br(style={'marginTop':'20px'}),
         html.Div(id="data-load-permission", children='-',style={"display":"none"}),
         dcc.Store(id='data-1'),
-        dcc.Store(id='data-2', storage_type='memory'),
-        dcc.Dropdown(id='x-axis-dropdown', className="dropdown",  multi=False),
+        dcc.Store(id='axis-options', storage_type='memory'),
+        dcc.Store(id='axis-values', storage_type='memory'),
         html.Div(
             id='data-viz-1',
             className='row',
+            style = {"display": "block", 'height': "75vh", 'horizontal-align':'center','vertical-align':'top'},
             children =[
                 dcc.Graph(
                     id='data-viz-1-graph',
@@ -120,9 +146,13 @@ app.layout = html.Div(
                         "modeBarButtonsToRemove": ['toImage', 'zoomIn', 'zoomOut','toggleSpikelines','hoverCompareCartesian', 'hoverClosestCartesian'],
                         "displaylogo":False,
                         },
-                    style={'height': '90vh','max-height': '81vh', 'horizontalAlign':'center','verticalAlign':'middle'}
+                    style={
+                        'margin':'auto',
+                        'width': "80%"
+                        }
                 )
-            ]
+            ],
+
         )
     ]
 )
@@ -156,7 +186,8 @@ def collapse_stuff(n_clicks, style):
 # Load the data
 
 @app.callback(
-    Output('data-1', 'data'),
+    [Output('data-1', 'data'),
+    Output('axis-options', 'data')],
     [Input('data-load-permission', 'children')]
     )
 def load_data(permission):
@@ -176,47 +207,88 @@ def load_data(permission):
     df = pd.read_csv(data_path)
     data = df.to_dict()
 
-    return data
+    axis_data = {x:None for x in df.columns}
+    return data, axis_data
 
 
 @app.callback(
-    Output('x-axis-dropdown', 'options'),
-    [Input('data-1', 'data')]
+    [Output('x-axis-dropdown', 'options'),
+    Output('y-axis-dropdown', 'options'),
+    Output('z-axis-dropdown', 'options'),
+    Output('groupby-dropdown', 'options'),
+    Output('sizeby-dropdown', 'options')],
+    [Input('axis-options', 'data'),
+    Input('axis-values', 'data')]
     )
-def update_dropdown(data):
+def update_dropdown(axis_data, axis_data_2):
     """
-    Updates the children of this dropdown menu
-    :params data: the data of this thing!
+    Updates the data layer for all dropdown menus
+    :params axis_data: the data of this thing!
     """
-    if not data:
+    if not axis_data:
         raise PreventUpdate
-    df = pd.DataFrame.from_records(data)
-    options = [{'label':x, 'value':x} for x in df.columns]
-    return options
 
-#
+    if not axis_data_2:
+        axis_data_2 = {}
+
+    # If the second doesn't exist, Instantiate them
+    x_options = [{'label':k, 'value':k} for k in axis_data.keys() if axis_data_2.get(k) not in ['y_axis', 'z_axis', 'groupby', 'sizeby']]
+    y_options = [{'label':k, 'value':k} for k in axis_data.keys() if axis_data_2.get(k) not in ['x_axis', 'z_axis', 'groupby','sizeby']]
+    z_options = [{'label':k, 'value':k} for k in axis_data.keys() if axis_data_2.get(k) not in ['x_axis', 'y_axis', 'groupby', 'sizeby']]
+    grp_options = [{'label':k, 'value':k} for k in axis_data.keys() if axis_data_2.get(k) not in ['x_axis', 'y_axis', 'z_axis','sizeby']]
+    sz_options = [{'label':k, 'value':k} for k in axis_data.keys() if axis_data_2.get(k) not in ['x_axis', 'y_axis', 'z_axis','groupby']]
+
+    return x_options, y_options, z_options, grp_options, sz_options
+
+@app.callback(
+    Output('axis-values', 'data'),
+    [Input('x-axis-dropdown', 'value'),
+    Input('y-axis-dropdown', 'value'),
+    Input('z-axis-dropdown', 'value'),
+    Input('groupby-dropdown', 'value'),
+    Input('sizeby-dropdown', 'value')]
+    )
+def update_dropdown(x_axis, y_axis, z_axis, group_by, size_by):
+    """
+    Updates the data layer for all dropdown menus
+    :params axis_data: the data of this thing!
+    """
+
+    data = {}
+
+    for k, v in zip([x_axis, y_axis, z_axis, group_by, size_by], ['x_axis','y_axis','z_axis', 'group_by', 'size_by']):
+        if k:
+            data[k] = v
+    logger.info(f'Updating axis. data: {data}')
+
+    return data
+
+
 # Create your data visualization
 @app.callback(
     Output('data-viz-1-graph', 'figure'),
     [Input('data-1', 'data'),
-    Input('x-axis-dropdown', 'value')]
+    Input('axis-values', 'data')]
     )
-def load_data(data, x_axis):
+def create_graph(data, axis_data):
     """
-    Load the data and stores it (if you have permission)
-    :params permission: permission to load the data?
+    Create a s 3d graph.
     """
     if not data:
         raise PreventUpdate
     logger.info(f'Creating the data visualization for the id data-viz-1')
+    print(axis_data)
 
     df = pd.DataFrame.from_records(data)
 
-    # If this isn't here, you get errors
-    if not x_axis:
-        x_axis = 'Age'
+    axis_data_inversed = {v:k for k,v in axis_data.items()} if axis_data else {}
+    x_col = axis_data_inversed.get('x_axis')
+    y_col = axis_data_inversed.get('y_axis')
+    z_col = axis_data_inversed.get('z_axis')
+    group_by = axis_data_inversed.get('group_by')
+    size_by = axis_data_inversed.get('size_by')
 
-    figure = update_figure_3d(df=df, x_col=x_axis)
+    figure = update_figure_3d(df=df, x_col=x_col, y_col=y_col, z_col=z_col, group_by=group_by, size_by=size_by)
     # ------------------------------------------------
 
     return figure
@@ -231,5 +303,5 @@ url = f"http://127.0.0.1:{port}"
 
 if __name__ == '__main__':
     # Run the actual app
-    app.run_server(debug=True, dev_tools_ui=True, port=port)
-    # app.run_server()
+    # app.run_server(debug=True, dev_tools_ui=True, port=port)
+    app.run_server()
