@@ -1,8 +1,8 @@
 {
-  "one_liner":"Some words",
-  "project_title" : "Welcome to this Plotly Dash tutorial!",
+  "one_liner":"This is a project description",
+  "project_title" : "Physician Perspectives on Social Media",
   "meta_title" : "Physician Perspectives",
-  "project_description":"We're going to be making a cool dashboard beginning to end in less than 2 hours!",
+  "project_description":"What do physicians think of the use of social media in their practices?",
   "project_description_tech":"Technical description can go here",
   "meta_description":"This is a cool dashboard",
   "meta_og_description":"This is a cool dashboard"

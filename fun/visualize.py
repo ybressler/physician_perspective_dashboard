@@ -90,29 +90,30 @@ def update_figure_3d(
     layout = go.Layout(
         clickmode='event+select',
         dragmode = 'select',
-        width=900,
+        # width=900,
         height=900,
+        margin=dict(r=10, l=10, b=10, t=10),
 
         # Create your axis
         scene=dict(
             camera=dict(
                 up=dict(x=0, y=0, z=1),
-                center=dict(x=0, y=0, z=0),
-                eye=dict(x=2, y=2, z=0.1)
+                center=dict(x=0, y=0, z=-0.5),
+                eye=dict(x=2, y=2, z=1)
                 ),
 
             xaxis = dict(
-                title = x_col,
+                title = x_col.replace('_',' ').title(),
                 color='white',
                 range = [df[x_col].min(), df[x_col].max()] if 'score' not in x_col else [0,100]
                 ),
             yaxis = dict(
-                title = y_col,
+                title = y_col.replace('_',' ').title(),
                 color='white',
                 range = [df[y_col].min(), df[y_col].max()] if 'score' not in y_col else [0,100]
             ),
             zaxis = dict(
-                title = z_col,
+                title = z_col.replace('_',' ').title(),
                 color='white',
                 range = [df[z_col].min(), df[z_col].max()] if 'score' not in z_col else [0,100]
                 ),
@@ -121,7 +122,6 @@ def update_figure_3d(
         ),
         plot_bgcolor = 'rgb(255, 255, 255, 0.0)',
         paper_bgcolor = 'rgb(255, 255, 255, 0.0)',
-        autosize=True,
         legend = dict(x = 0.8,y=0.9, bgcolor='rgb(26, 28, 35, 0.0)'),
     )
 

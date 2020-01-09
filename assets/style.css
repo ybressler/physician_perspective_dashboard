@@ -670,27 +670,66 @@ body{
   outline: 0;
 }
 
+/* Our dashboard stuff! */
+.left-column{
+  display: inline-block;
+  vertical-align:middle;
+  padding-left: 5%;
+  width: 22.5%;
+  padding-right: 2.5%;
+}
+
+.right-column{
+  display: inline-block;
+  vertical-align:top;
+  adding-left: 2.5%;
+  width: 62.5%;
+  padding-right: 5%;
+}
 
 .dropdown-label{
   display: inline-block;
   /* color:darkgreen; */
   font-weight: bold;
-  width: 10%;
-  padding-left: 10%;
-  padding-right: 2.5%;
+  width: 30%;
 }
 
 .dropdown-container{
   display: inline-block;
-  width: 20%;
+  width: 65%;
   padding-left: 2.5%;
   padding-right: 2.5%;
   padding-bottom:10px;
 }
 .dropdown{
-  color:darkgreen;
+  color:orange;
+}
+.graph-3d > .js-plotly-plot, .main-svg, .svg-container{
+  width:100vw;
+  height:70vh;
+
 }
 
+@media (max-width: 800px) {
+  .left-column{
+    display: inline-block;
+    padding-left: 5%;
+    width: 90%;
+    padding-right: 5%;
+  }
+
+  .right-column{
+    display: inline-block;
+    adding-left: 5%;
+    width: 90%;
+    padding-right: 5%;
+  }
+
+  .graph-3d > .js-plotly-plot, .main-svg, .svg-container{
+    width:100vw;
+    height: 70vh;
+  }
+}
 
 /* .td-link{
   color: #b2b2b2;

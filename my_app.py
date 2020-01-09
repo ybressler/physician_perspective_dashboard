@@ -85,74 +85,84 @@ DATA_PATH = PATH.joinpath("data").resolve()
 # --------------------------------------------------------------------------------
 app.layout = html.Div(
     children = [
-        # Some titles
-        html.H1(proj_deets['project_title'],  style={'marginLeft':'5%'}),
-        html.P(proj_deets['project_description'],  style={'marginLeft':'5%'}),
-        # collapsable
-        html.H2(
-            id='collapsable-header',
-            children = 'Toggle User Selections',
-            n_clicks=0,
-            style={'marginLeft':'5%', 'color':'orange','size':'3rem',  'cursor': 'pointer'}
-        ),
-        html.Div(
-            id='collapsable-content',
-            children = [
-
-                html.Div(className="row", children=[
-                    html.Div(className='dropdown-label', children ='X Axis'),
-                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='x-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True,searchable=False, placeholder="Select your X axis...")),
-                ]),
-
-                html.Div(className="row", children=[
-                    html.Div(className='dropdown-label', children ='Y Axis'),
-                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='y-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Y axis...")),
-                ]),
-
-                html.Div(className="row", children=[
-                    html.Div(className='dropdown-label', children ='Z Axis'),
-                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='z-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Z axis...")),
-                ]),
-
-                html.Div(className="row", children=[
-                    html.Div(className='dropdown-label', children ='Groupby'),
-                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='groupby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Groupby...")),
-                ]),
-
-                html.Div(className="row", children=[
-                    html.Div(className='dropdown-label', children ='Sizeby'),
-                    html.Div(className='dropdown-container', children = dcc.Dropdown(id='sizeby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Sizeby...")),
-                ]),
-
-                html.Hr()
-            ],
-            style={'marginLeft':'10%', 'marginRight':'5%'}
-        ),
-        # Store the data
-        html.Br(style={'marginTop':'20px'}),
+        # Save stuff
         html.Div(id="data-load-permission", children='-',style={"display":"none"}),
         dcc.Store(id='data-1'),
         dcc.Store(id='axis-options', storage_type='memory'),
         dcc.Store(id='axis-values', storage_type='memory'),
+
+        # Some titles
+        html.H1(proj_deets['project_title'],  style={'marginLeft':'5%'}),
+        html.P(proj_deets['project_description'],  style={'marginLeft':'5%'}),
+
+        # collapsable
+        html.Hr(),
+        html.Div(className='left-column',
+            children = [
+                html.H2(
+                    id='collapsable-header',
+                    children = 'Toggle User Selections',
+                    n_clicks=0,
+                    style={'marginLeft':'5%', 'color':'orange','size':'3rem',  'cursor': 'pointer'}
+                ),
+                html.Div(
+                    id='collapsable-content',
+                    children = [
+
+                        html.Div(className="row", children=[
+                            html.Div(className='dropdown-label', children ='X Axis'),
+                            html.Div(className='dropdown-container', children = dcc.Dropdown(id='x-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True,searchable=False, placeholder="Select your X axis...")),
+                        ]),
+
+                        html.Div(className="row", children=[
+                            html.Div(className='dropdown-label', children ='Y Axis'),
+                            html.Div(className='dropdown-container', children = dcc.Dropdown(id='y-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Y axis...")),
+                        ]),
+
+                        html.Div(className="row", children=[
+                            html.Div(className='dropdown-label', children ='Z Axis'),
+                            html.Div(className='dropdown-container', children = dcc.Dropdown(id='z-axis-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Z axis...")),
+                        ]),
+
+                        html.Div(className="row", children=[
+                            html.Div(className='dropdown-label', children ='Groupby'),
+                            html.Div(className='dropdown-container', children = dcc.Dropdown(id='groupby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Groupby...")),
+                        ]),
+
+                        html.Div(className="row", children=[
+                            html.Div(className='dropdown-label', children ='Sizeby'),
+                            html.Div(className='dropdown-container', children = dcc.Dropdown(id='sizeby-dropdown', className="dropdown",  multi=False, clearable=False, persistence=True, searchable=False, placeholder="Select your Sizeby...")),
+                        ]),
+
+                        html.Hr()
+                        ],
+                        style={'marginLeft':'10%', 'marginRight':'5%'}
+                    ),
+                ]
+        ),
         html.Div(
-            id='data-viz-1',
-            className='row',
-            style = {"display": "block", 'height': "75vh", 'horizontal-align':'center','vertical-align':'top'},
-            children =[
-                dcc.Graph(
-                    id='data-viz-1-graph',
-                    className="graph-3d",
-                    config={
-                        "modeBarButtonsToRemove": ['toImage', 'zoomIn', 'zoomOut','toggleSpikelines','hoverCompareCartesian', 'hoverClosestCartesian'],
-                        "displaylogo":False,
-                        },
-                    style={
-                        'margin':'auto',
-                        'width': "80%"
-                        }
+            className='right-column',
+            children=[
+                html.Div(
+                    id='data-viz-1',
+                    className='graph-row',
+                    children =[
+                        dcc.Graph(
+                            id='data-viz-1-graph',
+                            className="graph-3d",
+                            config={
+                                "modeBarButtonsToRemove": ['toImage', 'zoomIn', 'zoomOut','toggleSpikelines','hoverCompareCartesian', 'hoverClosestCartesian'],
+                                "displaylogo":False,
+                                "autosizable":True,
+                                "responsive":True,
+                            },
+                            style={
+                                'vertical-align':'top', 'overflowY':'overflow'
+                            }
+                        )
+                    ]
                 )
             ],
-
         )
     ]
 )
@@ -277,7 +287,6 @@ def create_graph(data, axis_data):
     if not data:
         raise PreventUpdate
     logger.info(f'Creating the data visualization for the id data-viz-1')
-    print(axis_data)
 
     df = pd.DataFrame.from_records(data)
 
@@ -303,5 +312,5 @@ url = f"http://127.0.0.1:{port}"
 
 if __name__ == '__main__':
     # Run the actual app
-    # app.run_server(debug=True, dev_tools_ui=True, port=port)
-    app.run_server()
+    app.run_server(debug=True, dev_tools_ui=True, port=port)
+    # app.run_server()
