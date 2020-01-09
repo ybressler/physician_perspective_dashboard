@@ -84,10 +84,23 @@ DATA_PATH = PATH.joinpath("data").resolve()
 app.layout = html.Div(
     children = [
         # Some titles
-        html.H1(proj_deets['project_title']),
-        html.P(proj_deets['project_description']),
-        html.H2('If you want to join in on the fun, stick to this side of the room', style={'marginLeft':'5%'}),
-        html.H2('Meanwhile you can close the ', style={'marginLeft':'5%'}),
+        html.H1(proj_deets['project_title'],  style={'marginLeft':'5%'}),
+        html.P(proj_deets['project_description'],  style={'marginLeft':'5%'}),
+        # collapsable
+        html.H2(
+            id='collapsable-header',
+            children = 'If you want to join in on the fun, stick to this side of the room',
+            n_clicks=0,
+            style={'marginLeft':'5%', 'color':'orange','size':'3rem',  'cursor': 'pointer'}
+        ),
+        html.Div(
+            id='collapsable-content',
+            children = [
+                html.Div(children = 'This is a setence about this thing. You love it!'),
+                html.Hr()
+            ],
+            style={'marginLeft':'10%', 'marginRight':'5%'}
+        ),
 
         # Store the data
         dcc.Store(id='data-1'),
@@ -96,6 +109,29 @@ app.layout = html.Div(
 )
 
 
+# --------------------------------------------------------------------------------
+
+@app.callback(
+    Output('collapsable-content', 'style'),
+    [Input('collapsable-header', 'n_clicks')],
+    [State('collapsable-content', 'style')]
+    )
+def collapse_stuff(n_clicks, style):
+    """
+    If the thing is clicked, collapse it
+    :param n_clicks: the number of clicks
+    :param style: the style of the collapse thing
+    """
+    # This is not password data... This is the big motherload
+    if not style:
+        raise PreventUpdate
+
+    if n_clicks%2 == 0:
+        style['display'] = 'block'
+    else:
+        style['display'] = 'none'
+
+    return style
 
 # --------------------------------------------------------------------------------
 #                 F I N I S H E D
