@@ -44,7 +44,7 @@ from fun.visualize import update_figure_3d
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Get the project details
-with open('assets/project_details.json') as f:
+with open(pathlib.Path('assets/project_details.json')) as f:
     proj_deets = json.load(f)
 
 # Instantiate meta tags
