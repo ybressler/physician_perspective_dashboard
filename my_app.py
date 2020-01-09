@@ -33,6 +33,8 @@ import plotly.graph_objs as go
 from dash.exceptions import PreventUpdate
 
 
+# Load private stuff
+from fun.create_3d_graph import create_3d_graph
 
 
 # --------------------------------------------------------------------------------
@@ -106,6 +108,22 @@ app.layout = html.Div(
         html.Div(id="data-load-permission", children='-',style={"display":"none"}),
         dcc.Store(id='data-1'),
         dcc.Store(id='data-2', storage_type='memory'),
+        dcc.Dropdown(id='x-axis-dropdown', className="dropdown",  multi=False),
+        html.Div(
+            id='data-viz-1',
+            className='row',
+            children =[
+                dcc.Graph(
+                    id='data-viz-1-graph',
+                    className="graph-3d",
+                    config={
+                        "modeBarButtonsToRemove": ['toImage', 'zoomIn', 'zoomOut','toggleSpikelines','hoverCompareCartesian', 'hoverClosestCartesian'],
+                        "displaylogo":False,
+                        },
+                    style={'height': '90vh','max-height': '81vh', 'horizontalAlign':'center','verticalAlign':'middle'}
+                )
+            ]
+        )
     ]
 )
 
@@ -141,7 +159,11 @@ def collapse_stuff(n_clicks, style):
     Output('data-1', 'data'),
     [Input('data-load-permission', 'children')]
     )
-def collapse_stuff(permission):
+def load_data(permission):
+    """
+    Load the data and stores it (if you have permission)
+    :params permission: permission to load the data?
+    """
     if not permission:
         raise PreventUpdate
 
@@ -151,8 +173,53 @@ def collapse_stuff(permission):
         data_path = pathlib.Path('Data/Clean_anonymized_dr_data.csv')
 
     logger.info(f'Loading data from', data_path)
+    df = pd.read_csv(data_path)
+    data = df.to_dict()
 
-    return {}
+    return data
+
+
+@app.callback(
+    Output('x-axis-dropdown', 'options'),
+    [Input('data-1', 'data')]
+    )
+def update_dropdown(data):
+    """
+    Updates the children of this dropdown menu
+    :params data: the data of this thing!
+    """
+    if not data:
+        raise PreventUpdate
+    df = pd.DataFrame.from_records(data)
+    options = [{'label':x, 'value':x} for x in df.columns]
+    return options
+
+#
+# Create your data visualization
+@app.callback(
+    Output('data-viz-1-graph', 'figure'),
+    [Input('data-1', 'data'),
+    Input('x-axis-dropdown', 'value')]
+    )
+def load_data(data, x_axis):
+    """
+    Load the data and stores it (if you have permission)
+    :params permission: permission to load the data?
+    """
+    if not data:
+        raise PreventUpdate
+    logger.info(f'Creating the data visualization for the id data-viz-1')
+
+    df = pd.DataFrame.from_records(data)
+
+    # If this isn't here, you get errors
+    if not x_axis:
+        x_axis = 'Age'
+
+    figure = create_3d_graph(df=df, x_col=x_axis)
+    # ------------------------------------------------
+
+    return figure
 
 # --------------------------------------------------------------------------------
 #                 F I N I S H E D
